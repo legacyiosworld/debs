@@ -1,0 +1,249 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body {
+    background: #c5ccd4 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAC1JREFUeNpi+P//PwMewMTAgC4IEwMTKy5FGIqgShgZ8ChEF0QJoosjOBBgAAMIExX49M55AAAAAElFTkSuQmCC') repeat;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #000000;
+    padding-bottom: 30px;
+    user-select: none;
+}
+
+.ios-navbar {
+    background: linear-gradient(to bottom, #768da5 0%, #66809c 50%, #526f8f 50%, #466385 100%);
+    border-bottom: 1px solid #2d3e52;
+    height: 44px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.ios-nav-title {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.ios-nav-btn {
+    position: absolute;
+    left: 8px;
+    height: 30px;
+    padding: 0 10px 0 14px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    background: linear-gradient(to bottom, #758ca4 0%, #466385 100%);
+    border: 1px solid #3c526d;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.ios-nav-btn.back-btn {
+    clip-path: polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%);
+    padding-left: 14px;
+}
+
+.ios-nav-btn:active {
+    background: #334963;
+}
+
+.ios-container {
+    display: none;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.ios-container.active {
+    display: block;
+}
+
+.ios-group-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #4c566c;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    margin: 15px 10px 6px 15px;
+}
+
+.ios-table-view {
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #ababab;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(255,255,255,0.6);
+    overflow: hidden;
+}
+
+.ios-table-cell {
+    border-bottom: 1px solid #ababab;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.ios-table-cell:last-child {
+    border-bottom: none;
+}
+
+.ios-table-cell:active {
+    background-color: #0259f6;
+    color: #ffffff;
+}
+
+.ios-table-cell:active .cell-label, 
+.ios-table-cell:active .file-name, 
+.ios-table-cell:active .file-meta {
+    color: #ffffff !important;
+}
+
+.cell-icon {
+    width: 29px;
+    height: 29px;
+    border-radius: 6px;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.cell-label {
+    font-size: 17px;
+    font-weight: bold;
+    color: #000000;
+    flex: 1;
+}
+
+.cell-link {
+    text-decoration: none;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.ios-table-cell.arrow::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    width: 9px;
+    height: 9px;
+    border-top: 3px solid #7f7f7f;
+    border-right: 3px solid #7f7f7f;
+    transform: rotate(45deg);
+}
+
+.ios-table-cell:active::after {
+    border-color: #ffffff;
+}
+
+.file-info-block {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    padding-right: 20px;
+}
+
+.file-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-meta {
+    font-size: 13px;
+    color: #7f7f7f;
+    margin-top: 2px;
+}
+
+.ios-download-btn {
+    background: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 50%, #e1e1e1 50%, #cecece 100%);
+    border: 1px solid #a1a1a1;
+    border-radius: 4px;
+    color: #000000;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    text-shadow: 0 1px 0 #ffffff;
+    z-index: 5;
+}
+
+.ios-download-btn:active {
+    background: #b5b5b5;
+}
+
+.ios-info-text {
+    font-size: 14px;
+    color: #4c566c;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    margin: 20px 15px;
+    line-height: 1.4;
+}
+
+.ios-loader, .ios-error {
+    text-align: center;
+    font-size: 16px;
+    color: #4c566c;
+    padding: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.ios-pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 0 10px;
+}
+
+.ios-page-btn {
+    background: linear-gradient(to bottom, #768da5 0%, #526f8f 100%);
+    border: 1px solid #2d3e52;
+    border-right: none;
+    color: #ffffff;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.ios-page-btn:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.ios-page-btn:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: 1px solid #2d3e52;
+}
+
+.ios-page-btn.active {
+    background: linear-gradient(to bottom, #466385 0%, #768da5 100%);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.ios-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

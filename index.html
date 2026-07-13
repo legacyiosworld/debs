@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Legacy Tweaks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="ios-navbar">
+        <button class="ios-nav-btn back-btn" id="nav-back-btn" onclick="switchTab('main')" style="display: none;">Назад</button>
+        <h1 class="ios-nav-title" id="nav-title">Tweaks</h1>
+    </header>
+
+    <main id="tab-main" class="ios-container active">
+        <div class="ios-group-title">Каталог</div>
+        <ul class="ios-table-view">
+            <li class="ios-table-cell arrow" onclick="switchTab('files')">
+                <img src="image.png" alt="" class="cell-icon">
+                <span class="cell-label">Твики</span>
+            </li>
+        </ul>
+
+        <div class="ios-group-title">Контакты и Сообщество</div>
+        <ul class="ios-table-view">
+            <li class="ios-table-cell arrow">
+                <a href="https://t.me/legacyiosworld" target="_blank" class="cell-link">
+                    <span class="cell-label">Наш Telegram-канал</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="ios-info-text">
+            <p>Legacy Tweaks - это каталог твиков для устройств с iOS 6 и ниже.</p>
+            .</p>
+    
+        </div>
+    </main>
+
+    <main id="tab-files" class="ios-container">
+        <div class="ios-group-title" id="files-count-title">Доступные загрузки</div>
+        
+        <div class="ios-loader" id="loader">Загрузка...</div>
+        <div class="ios-error" id="error-msg" style="display: none;"></div>
+
+        <div id="files-wrapper" style="display: none;">
+            <ul class="ios-table-view" id="files-list">
+            </ul>
+
+            <div class="ios-pagination" id="pagination">
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
