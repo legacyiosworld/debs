@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,6 +12,7 @@ body {
     color: #000000;
     padding-bottom: 30px;
     user-select: none;
+    min-height: 100vh;
 }
 
 .ios-navbar {
@@ -23,6 +25,8 @@ body {
     justify-content: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     z-index: 10;
+    position: sticky;
+    top: 0;
 }
 
 .ios-nav-title {
@@ -31,11 +35,14 @@ body {
     font-weight: bold;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
     text-align: center;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ios-nav-btn {
     position: absolute;
-    left: 8px;
     height: 30px;
     padding: 0 10px 0 14px;
     color: #ffffff;
@@ -50,12 +57,23 @@ body {
 }
 
 .ios-nav-btn.back-btn {
+    left: 8px;
     clip-path: polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%);
     padding-left: 14px;
 }
 
+.ios-nav-btn.refresh-btn {
+    right: 8px;
+    padding: 0 12px;
+}
+
 .ios-nav-btn:active {
     background: #334963;
+}
+
+.ios-nav-btn.spinning {
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .ios-container {
@@ -101,23 +119,62 @@ body {
     border-bottom: none;
 }
 
+.ios-table-cell.static:active {
+    background-color: #ffffff;
+    color: #000000;
+}
+
 .ios-table-cell:active {
     background-color: #0259f6;
     color: #ffffff;
 }
 
-.ios-table-cell:active .cell-label, 
-.ios-table-cell:active .file-name, 
-.ios-table-cell:active .file-meta {
+.ios-table-cell:active .cell-label,
+.ios-table-cell:active .file-name,
+.ios-table-cell:active .file-meta,
+.ios-table-cell:active .field-label {
     color: #ffffff !important;
 }
 
-.cell-icon {
+.glyph-icon {
     width: 29px;
     height: 29px;
+    min-width: 29px;
     border-radius: 6px;
     margin-right: 12px;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.15);
+}
+
+.icon-folder { background: linear-gradient(to bottom,#7fb3e8,#3f7dc9); }
+.icon-upload { background: linear-gradient(to bottom,#8fd48f,#3f9c47); }
+.icon-tg     { background: linear-gradient(to bottom,#7ecdf0,#2f9bc9); }
+.icon-archive{ background: linear-gradient(to bottom,#c7a8ec,#8a5fc9); }
+.icon-plus   { background: linear-gradient(to bottom,#8fd48f,#3f9c47); font-size:19px; }
+
+.file-type-icon {
+    width: 29px;
+    height: 29px;
+    min-width: 29px;
+    border-radius: 6px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.15);
 }
 
 .cell-label {
@@ -127,11 +184,18 @@ body {
     flex: 1;
 }
 
+.cell-badge {
+    font-size: 15px;
+    color: #7f7f7f;
+    margin-right: 4px;
+}
+
 .cell-link {
     text-decoration: none;
     display: flex;
     width: 100%;
     align-items: center;
+    color: inherit;
 }
 
 .ios-table-cell.arrow::after {
@@ -154,7 +218,7 @@ body {
     flex-direction: column;
     flex: 1;
     min-width: 0;
-    padding-right: 20px;
+    padding-right: 12px;
 }
 
 .file-name {
@@ -184,6 +248,7 @@ body {
     box-shadow: 0 1px 0 rgba(255,255,255,0.5);
     text-shadow: 0 1px 0 #ffffff;
     z-index: 5;
+    white-space: nowrap;
 }
 
 .ios-download-btn:active {
@@ -191,12 +256,19 @@ body {
 }
 
 .ios-info-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #4c566c;
     text-align: center;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
     margin: 20px 15px;
     line-height: 1.4;
+}
+
+.mono {
+    font-family: "Courier New", monospace;
+    background: rgba(0,0,0,0.06);
+    padding: 0 3px;
+    border-radius: 3px;
 }
 
 .ios-loader, .ios-error {
@@ -207,11 +279,128 @@ body {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
+.ios-error {
+    color: #7a1f1f;
+}
+
+.ios-empty-search {
+    text-align: center;
+    font-size: 15px;
+    color: #4c566c;
+    padding: 25px 10px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.ios-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #4c566c;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ios-spin 0.7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 4px;
+}
+
+@keyframes ios-spin {
+    to { transform: rotate(360deg); }
+}
+
+.ios-searchbar {
+    background: linear-gradient(to bottom, #97a6b7 0%, #8393a7 100%);
+    border: 1px solid #6d7d92;
+    border-radius: 7px;
+    padding: 6px;
+    margin: 12px 10px 0 10px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.ios-search-input-wrap {
+    background: #ffffff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.35);
+}
+
+.ios-search-icon {
+    color: #8f8f8f;
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.ios-search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 16px;
+    background: transparent;
+    color: #000000;
+}
+
+.ios-search-clear {
+    color: #8f8f8f;
+    background: #d0d0d0;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.ios-sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 12px 4px 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ios-sort-label {
+    font-size: 13px;
+    color: #4c566c;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.ios-segmented {
+    display: flex;
+}
+
+.ios-seg-btn {
+    background: linear-gradient(to bottom, #f7f7f7 0%, #d9d9d9 100%);
+    border: 1px solid #9c9c9c;
+    border-right: none;
+    color: #333333;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.ios-seg-btn:first-child { border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
+.ios-seg-btn:last-child { border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-right: 1px solid #9c9c9c; }
+
+.ios-seg-btn.active {
+    background: linear-gradient(to bottom, #466385 0%, #768da5 100%);
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.35);
+}
+
 .ios-pagination {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     margin: 20px 0;
     padding: 0 10px;
+    gap: 0;
 }
 
 .ios-page-btn {
@@ -246,4 +435,168 @@ body {
 .ios-page-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.field-cell {
+    justify-content: space-between;
+    cursor: default;
+}
+
+.field-cell:active {
+    background-color: #ffffff !important;
+}
+
+.field-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #4c566c;
+    min-width: 110px;
+}
+
+.ios-field-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    text-align: right;
+    color: #000000;
+}
+
+.switch-cell { justify-content: space-between; cursor: default; }
+.switch-cell:active { background-color: #ffffff !important; }
+
+.ios-switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 29px;
+}
+
+.ios-switch input { display: none; }
+
+.ios-switch-track {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #d0d0d0, #f2f2f2);
+    border: 1px solid #a0a0a0;
+    border-radius: 16px;
+    transition: background 0.15s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.ios-switch input:checked + .ios-switch-track {
+    background: linear-gradient(to bottom, #63c463, #3fa63f);
+    border-color: #2e8b2e;
+}
+
+.ios-switch-knob {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 26px;
+    height: 25px;
+    background: linear-gradient(to bottom, #ffffff, #e2e2e2);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    transition: transform 0.15s ease;
+}
+
+.ios-switch input:checked ~ .ios-switch-track .ios-switch-knob {
+    transform: translateX(22px);
+}
+
+.file-picker-cell {
+    justify-content: flex-start;
+}
+
+.upload-item {
+    flex-direction: column;
+    align-items: stretch;
+    cursor: default;
+}
+
+.upload-item:active { background-color: #ffffff !important; }
+
+.upload-item-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-item-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+}
+
+.upload-item-remove {
+    color: #b23c3c;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.upload-item-status {
+    font-size: 12px;
+    color: #7f7f7f;
+    margin-top: 4px;
+}
+
+.upload-item-status.ok { color: #2e8b2e; }
+.upload-item-status.fail { color: #b23c3c; }
+
+.ios-progress-track {
+    height: 12px;
+    border-radius: 6px;
+    background: repeating-linear-gradient(45deg, #e6e6e6, #e6e6e6 4px, #dcdcdc 4px, #dcdcdc 8px);
+    border: 1px solid #a1a1a1;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.ios-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to bottom, #6fb8ff 0%, #2f7fd9 50%, #1f6bc2 50%, #1656a0 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+    transition: width 0.2s ease;
+}
+
+.ios-upload-actions {
+    margin: 15px 10px;
+}
+
+.ios-action-btn {
+    width: 100%;
+    background: linear-gradient(to bottom, #7fc47f 0%, #3f9c3f 50%, #388f38 50%, #2e7d2e 100%);
+    border: 1px solid #235e23;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 11px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 1px 2px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.ios-action-btn:active {
+    background: #2e7d2e;
+}
+
+.ios-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+    .field-label { min-width: 90px; font-size: 13px; }
+    .ios-nav-title { font-size: 17px; }
 }
