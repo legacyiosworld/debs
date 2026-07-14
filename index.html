@@ -1,57 +1,133 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Legacy Tweaks</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Legacy Tweaks</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="ios-navbar">
-        <button class="ios-nav-btn back-btn" id="nav-back-btn" onclick="switchTab('main')" style="display: none;">Назад</button>
-        <h1 class="ios-nav-title" id="nav-title">Tweaks</h1>
-    </header>
+<header class="ios-navbar">
+    <button class="ios-nav-btn back-btn" id="nav-back-btn" onclick="Router.go('main')" style="display:none;">Назад</button>
+    <h1 class="ios-nav-title" id="nav-title">Legacy Tweaks</h1>
+    <button class="ios-nav-btn refresh-btn" id="nav-refresh-btn" onclick="App.forceRefresh()" style="display:none;">Обновить</button>
+</header>
 
-    <main id="tab-main" class="ios-container active">
-        <div class="ios-group-title">Каталог</div>
-        <ul class="ios-table-view">
-            <li class="ios-table-cell arrow" onclick="switchTab('files')">
-                <img src="image.png" alt="" class="cell-icon">
-                <span class="cell-label">Твики</span>
-            </li>
-        </ul>
+<main id="tab-main" class="ios-container">
+    <div class="ios-group-title">Каталог</div>
+    <ul class="ios-table-view">
+        <li class="ios-table-cell arrow" onclick="Router.go('files')">
+            <span class="cell-icon glyph-icon icon-folder">&#9638;</span>
+            <span class="cell-label">Файлы и твики</span>
+            <span class="cell-badge" id="main-files-badge"></span>
+        </li>
+    </ul>
 
-        <div class="ios-group-title">Контакты и Сообщество</div>
-        <ul class="ios-table-view">
-            <li class="ios-table-cell arrow">
-                <a href="https://t.me/legacyiosworld" target="_blank" class="cell-link">
-                    <span class="cell-label">Наш Telegram-канал</span>
-                </a>
-            </li>
-        </ul>
-        
-        <div class="ios-info-text">
-            <p>Legacy Tweaks - это каталог твиков для устройств с iOS.</p>
-            .</p>
-    
+    <div class="ios-group-title">Контакты и сообщество</div>
+    <ul class="ios-table-view">
+        <li class="ios-table-cell arrow">
+            <a href="https://t.me/твой_канал" target="_blank" class="cell-link">
+                <span class="cell-icon glyph-icon icon-tg">&#9992;</span>
+                <span class="cell-label">Наш Telegram-канал</span>
+            </a>
+        </li>
+        <li class="ios-table-cell arrow" id="archive-item-link">
+            <a href="#" target="_blank" class="cell-link">
+                <span class="cell-icon glyph-icon icon-archive">&#9672;</span>
+                <span class="cell-label">Открыть на archive.org</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="ios-info-text" id="sync-status-text">
+        Сайт находится в тесте,если заметите что либо то напишите в Telegram-канал
+    </div>
+</main>
+
+<main id="tab-files" class="ios-container">
+
+    <div class="ios-searchbar">
+        <div class="ios-search-input-wrap">
+            <span class="ios-search-icon">&#9906;</span>
+            <input type="text" id="search-input" class="ios-search-input" placeholder="Поиск твиков и файлов" autocomplete="off">
+            <span class="ios-search-clear" id="search-clear" style="display:none;" onclick="Search.clear()">&#10005;</span>
         </div>
-    </main>
+    </div>
 
-    <main id="tab-files" class="ios-container">
-        <div class="ios-group-title" id="files-count-title">Доступные загрузки</div>
-        
-        <div class="ios-error" id="error-msg" style="display: none;"></div>
-
-        <div id="files-wrapper" style="display: none;">
-            <ul class="ios-table-view" id="files-list">
-            </ul>
-
-            <div class="ios-pagination" id="pagination">
-            </div>
+    <div class="ios-sort-bar">
+        <span class="ios-sort-label">Сортировка:</span>
+        <div class="ios-segmented" id="sort-segmented">
+            <button class="ios-seg-btn active" data-sort="name">Имя</button>
+            <button class="ios-seg-btn" data-sort="size">Размер</button>
+            <button class="ios-seg-btn" data-sort="date">Дата</button>
         </div>
-    </main>
+    </div>
 
-    <script src="script.js"></script>
+    <div class="ios-group-title" id="files-count-title">Доступные загрузки</div>
+
+    <div class="ios-loader" id="loader">
+        <span class="ios-spinner"></span> Загрузка...
+    </div>
+    <div class="ios-error" id="error-msg" style="display:none;"></div>
+
+    <div id="files-wrapper" style="display:none;">
+        <div class="ios-empty-search" id="empty-search" style="display:none;">Ничего не найдено</div>
+        <ul class="ios-table-view" id="files-list"></ul>
+
+        <div class="ios-pagination" id="pagination"></div>
+        <div class="ios-info-text" id="cache-status-text"></div>
+    </div>
+</main>
+
+<main id="tab-upload" class="ios-container">
+    <div class="ios-group-title">Ключи Archive.org (IAS3)</div>
+    <ul class="ios-table-view">
+        <li class="ios-table-cell field-cell">
+            <span class="field-label">Access Key</span>
+            <input type="text" id="ias3-access" class="ios-field-input" placeholder="access key" autocomplete="off">
+        </li>
+        <li class="ios-table-cell field-cell">
+            <span class="field-label">Secret Key</span>
+            <input type="password" id="ias3-secret" class="ios-field-input" placeholder="secret key" autocomplete="off">
+        </li>
+        <li class="ios-table-cell switch-cell">
+            <span class="cell-label">Запомнить в этом браузере</span>
+            <label class="ios-switch">
+                <input type="checkbox" id="remember-keys">
+                <span class="ios-switch-track"><span class="ios-switch-knob"></span></span>
+            </label>
+        </li>
+    </ul>
+    <div class="ios-info-text">
+        Ключи IAS3 берутся в личном кабинете Archive.org на странице
+        <span class="mono">archive.org/account/s3.php</span>. Ключи хранятся только в этом браузере
+        (localStorage) и никогда не попадают в код сайта на GitHub.
+    </div>
+
+    <div class="ios-group-title">Файлы для загрузки</div>
+    <ul class="ios-table-view">
+        <li class="ios-table-cell file-picker-cell" onclick="document.getElementById('file-input').click()">
+            <span class="cell-icon glyph-icon icon-plus">+</span>
+            <span class="cell-label">Выбрать файлы...</span>
+        </li>
+    </ul>
+    <input type="file" id="file-input" multiple style="display:none;">
+
+    <ul class="ios-table-view" id="upload-queue"></ul>
+
+    <div class="ios-upload-actions" id="upload-actions" style="display:none;">
+        <button class="ios-action-btn" id="start-upload-btn" onclick="Uploader.start()">Начать загрузку</button>
+    </div>
+
+    <div class="ios-error" id="upload-error" style="display:none;"></div>
+    <div class="ios-info-text">
+        Файлы отправляются напрямую в коллекцию через S3-совместимый API Archive.org.
+        После успешной загрузки список во вкладке «Файлы и твики» обновится автоматически
+        (индексация на стороне Archive.org может занять несколько минут).
+    </div>
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
