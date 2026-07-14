@@ -1,5 +1,5 @@
 
-const ARCHIVE_ITEM_ID = 'ваша_коллекция_или_айди';
+const ARCHIVE_ITEM_ID = 'org.tihmstar.kDFUApp';
 
 const ITEMS_PER_PAGE = 8;
 
