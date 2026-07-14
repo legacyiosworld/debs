@@ -1,5 +1,5 @@
 const ARCHIVE_ITEM_IDS = [
-    'zephyr_1.6.4-1_iphoneos-arm_202607'
+    'org.tihmstar.kDFUApp'
 ]; 
 
 const ITEMS_PER_PAGE = 8; 
