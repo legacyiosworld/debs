@@ -7,7 +7,7 @@ const ITEMS_PER_PAGE = 8;
 let allFiles = [];
 let currentPage = 1;
 
-function switchTab(tabName) {
+function switchTab(tabName, pushState = true) {
     document.querySelectorAll('.ios-container').forEach(sec => sec.classList.remove('active'));
     
     const targetSection = document.getElementById(`tab-${tabName}`);
@@ -22,20 +22,20 @@ function switchTab(tabName) {
         if (allFiles.length === 0) {
             fetchArchiveData();
         }
+        if (pushState) history.pushState({ tab: 'files' }, '', '#files');
     } else {
         backBtn.style.display = 'none';
         navTitle.textContent = 'Legacy Tweaks';
+        if (pushState) history.pushState({ tab: 'main' }, '', '#main');
     }
 }
 
 async function fetchArchiveData() {
-    const loader = document.getElementById('loader');
     const errorMsg = document.getElementById('error-msg');
     const filesWrapper = document.getElementById('files-wrapper');
 
-    if (!ARCHIVE_ITEM_IDS || ARCHIVE_ITEM_IDS.length === 0 || ARCHIVE_ITEM_IDS[0] === 'ваша_коллекция_или_айди') {
-        loader.style.display = 'none';
-        errorMsg.textContent = 'Укажите хотя бы один идентификатор в массиве ARCHIVE_ITEM_IDS в script.js';
+    if (!ARCHIVE_ITEM_IDS || ARCHIVE_ITEM_IDS.length === 0) {
+        errorMsg.textContent = 'Укажите ID коллекций в ARCHIVE_ITEM_IDS';
         errorMsg.style.display = 'block';
         return;
     }
@@ -48,10 +48,9 @@ async function fetchArchiveData() {
             if (!cleanId) continue;
 
             const response = await fetch(`https://archive.org/metadata/${cleanId}`);
-            if (!response.ok) continue; 
+            if (!response.ok) continue;
             
             const data = await response.json();
-            
             if (!data.files || data.files.length === 0) continue;
 
             const server = data.server;
@@ -64,20 +63,21 @@ async function fetchArchiveData() {
                        !name.endsWith('_meta.sqlite') &&
                        !name.endsWith('.torrent');
             }).map(file => {
+                const title = file.title ? file.title : file.name;
+                const meta = file.description ? `${file.description} • ${formatBytes(file.size)}` : formatBytes(file.size);
+
                 return {
-                    name: file.name,
-                    size: formatBytes(file.size),
+                    name: title,
+                    size: meta,
                     url: `https://${server}${dir}/${file.name}`
                 };
             });
 
             allFiles = allFiles.concat(parsedFiles);
         }
-
-        loader.style.display = 'none';
         
         if (allFiles.length === 0) {
-            errorMsg.textContent = 'Файлы не найдены ни в одной из указанных коллекций';
+            errorMsg.textContent = 'Каталог пуст';
             errorMsg.style.display = 'block';
         } else {
             filesWrapper.style.display = 'block';
@@ -85,7 +85,6 @@ async function fetchArchiveData() {
         }
 
     } catch (error) {
-        loader.style.display = 'none';
         errorMsg.textContent = `Ошибка: ${error.message}`;
         errorMsg.style.display = 'block';
     }
@@ -154,3 +153,15 @@ function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+function goBack() {
+    history.back();
+}
+
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.tab) {
+        switchTab(event.state.tab, false);
+    } else {
+        switchTab('main', false);
+    }
+});
